@@ -1,0 +1,100 @@
+package cn.prince.pojo;
+
+import java.sql.Date;
+
+public class Checktable {
+	private int checkid;
+	private Date checkdate;
+	private String problem;
+	private String paying;
+	private String username;
+	private int rentid;
+	/**
+	 * @return the checkid
+	 */
+	public int getCheckid() {
+		return checkid;
+	}
+	/**
+	 * @param checkid the checkid to set
+	 */
+	public void setCheckid(int checkid) {
+		this.checkid = checkid;
+	}
+	/**
+	 * @return the checkdate
+	 */
+	public Date getCheckdate() {
+		return checkdate;
+	}
+	/**
+	 * @param checkdate the checkdate to set
+	 */
+	public void setCheckdate(Date checkdate) {
+		this.checkdate = checkdate;
+	}
+	/**
+	 * @return the problem
+	 */
+	public String getProblem() {
+		return problem;
+	}
+	/**
+	 * @param problem the problem to set
+	 */
+	public void setProblem(String problem) {
+		this.problem = problem;
+	}
+	/**
+	 * @return the paying
+	 */
+	public String getPaying() {
+		return paying;
+	}
+	/**
+	 * @param paying the paying to set
+	 */
+	public void setPaying(String paying) {
+		this.paying = paying;
+	}
+	/**
+	 * @return the username
+	 */
+	public String getUsername() {
+		return username;
+	}
+	/**
+	 * @param username the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	/**
+	 * @return the rentid
+	 */
+	public int getRentid() {
+		return rentid;
+	}
+	/**
+	 * @param rentid the rentid to set
+	 */
+	public void setRentid(int rentid) {
+		this.rentid = rentid;
+	}
+	public Checktable(int checkid, Date checkdate, String problem, String paying, String username, int rentid) {
+		super();
+		this.checkid = checkid;
+		this.checkdate = checkdate;
+		this.problem = problem;
+		this.paying = paying;
+		this.username = username;
+		this.rentid = rentid;
+	}
+	public Checktable() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+	
+}

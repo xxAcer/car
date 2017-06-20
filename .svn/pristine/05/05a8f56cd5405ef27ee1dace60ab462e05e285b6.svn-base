@@ -1,0 +1,76 @@
+package cn.prince.controller;
+
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.gson.Gson;
+
+import cn.prince.pojo.Car;
+import cn.prince.pojo.Checktable;
+import cn.prince.service.CheckService;
+import cn.prince.service.RentService;
+
+@Controller
+public class CheckController {
+	@Resource
+	CheckService checkService;
+	@Resource
+	RentService rentService;
+	
+	@RequestMapping("check")
+	public String check(HttpServletRequest request) {
+		int checkid = Integer.parseInt(request.getParameter("checkid"));
+		Date checkdate = Date.valueOf(request.getParameter("checkdate"));
+		String problem = request.getParameter("problem");
+		String paying = request.getParameter("paying");
+		String username = request.getParameter("username");
+		int rentid = Integer.parseInt(request.getParameter("rentid"));
+		String tableid = request.getParameter("tableid");
+		int id = 0;
+		if(tableid != null) {
+			id = Integer.parseInt(tableid);
+		}
+		
+		Checktable checktable = new Checktable(checkid, checkdate, problem, paying, username, rentid);
+		
+		int i = checkService.add(checktable);
+		
+		if(i>0) {
+			rentService.updateById(checkid );
+		}
+		
+		return "index";
+		
+	}
+	
+	@RequestMapping("checkAll")
+	@ResponseBody
+	public String checkAll(HttpServletRequest request)  {
+		Map map = new HashMap<>();
+		List<Checktable> c = checkService.findAll();
+		request.getSession().setAttribute("check", c);
+		System.out.println("++++++++++++"+c.size());
+		
+		if(c.size()>0) {
+			map.put("flg", "ok");
+		}else {
+			map.put("flg", "ng");
+		}
+		
+		Gson gson = new Gson();
+		String str = gson.toJson(map);
+		System.out.println(str);
+		return str;
+	}
+	
+	
+}

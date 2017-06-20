@@ -1,0 +1,90 @@
+package cn.prince.controller;
+
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.gson.Gson;
+
+import cn.prince.pojo.Car;
+import cn.prince.pojo.Customers;
+import cn.prince.pojo.Rent;
+import cn.prince.service.CarService;
+import cn.prince.service.CustomersService;
+import cn.prince.service.RentService;
+
+@Controller
+public class CustomersController {
+	
+	@Resource
+	CustomersService ustomersService;
+	@Resource
+	CarService carService;
+	@Resource
+	RentService rentService;
+	
+	//租车的功能 实现跳转的功能
+		@RequestMapping("zhuche")
+		public String zhuche (HttpServletRequest request) {
+			String uid = UUID.randomUUID().toString().replace("-", "");
+			request.getSession().setAttribute("tableid", uid);
+			int carnumber = Integer.parseInt(request.getParameter("carnumber"));
+			Car c = carService.findById(carnumber);
+			request.getSession().setAttribute("carbyid", c);
+			
+			System.out.println(c);
+			
+			return "form-collapse";
+			
+		}
+	
+		//生成租出单，插入到数据库里面 同时把车辆信息 未租改成以租
+		@RequestMapping("rentorder")
+		@ResponseBody
+		public synchronized  String rent(HttpServletRequest request) {
+			
+			Map map = new HashMap<>();
+			int i = 0;
+			Customers customers = (Customers) request.getSession().getAttribute("customers");
+			String username = request.getParameter("username");
+			System.out.println("客户名----------------"+username);
+			String imprest = request.getParameter("imprest");
+			String shouldpayprice = request.getParameter("shouldpayprice");
+			String price = request.getParameter("price");
+			String cname = request.getParameter("cname");
+			int carid = Integer.parseInt(request.getParameter("carid"));
+			Date begindate = Date.valueOf(request.getParameter("begindate"));
+			Date returndate =Date.valueOf( request.getParameter("returndate"));
+			
+			Rent r = new Rent(0, imprest, shouldpayprice, price, begindate, returndate, 0, 0,cname, username, carid);
+			Car car = carService.findById(carid);
+			if(car.getIsrenting().equals("0")) {
+				System.out.println("++++++++++++++++++++++"+car.getIsrenting());
+				  i = rentService.addorder(r);
+			}
+			if(i>0) {
+				System.out.println("车牌号================"+carid);
+				carService.toRent(carid);
+				map.put("flg", "ok");
+				
+				
+			}else {
+				map.put("flg", "ng");
+			}
+			
+			Gson gson = new Gson();
+			String str = gson.toJson(map);
+			System.out.println(str);
+			return str;
+		}
+		
+	
+}

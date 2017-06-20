@@ -1,0 +1,76 @@
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<c:set var="prince" value="${pageContext.request.contextPath}"></c:set>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>租车系统</title>
+    <link rel="stylesheet" type="text/css" href="Styles/base.css" />
+    <link rel="stylesheet" type="text/css" href="Styles/admin-all.css" />
+    <link rel="stylesheet" type="text/css" href="Styles/bootstrap.min.css" />
+    <script type="text/javascript" src="Scripts/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="Scripts/jquery.spritely-0.6.js"></script>
+    <script type="text/javascript" src="Scripts/chur.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="Styles/login.css" />
+    <script src="${prince}/js/jquery.js"></script>
+    
+    <script type="text/javascript">
+	$(function(){
+		$("#btn").click(function(){
+			$.ajax({
+				type:"post",
+				url:"${prince}/login",
+				data:$("#userForm").serialize(),
+				dataType:"json",
+				success:function(data){
+					if(data.flg=="ok"){
+						location.href="${prince}/index";
+					}else{
+						$("#error_message").text("登录失败!");
+					}				
+				}
+				
+			})
+		})
+	})
+</script>
+</head>
+<body>
+	<form action="index.jsp" id="userForm" method="post">
+	
+    <div id="clouds" class="stage"></div>
+    <div class="loginmain">
+    </div>
+	 
+    <div class="row-fluid">
+        <h1>加油 租车系统</h1>
+        <p>
+            <label>帐&nbsp;&nbsp;&nbsp;号：<input type="text" id="uid" name="username" /></label>
+        </p>
+        <p>
+            <label>密&nbsp;&nbsp;&nbsp;码：<input type="password" id="pwd" name="password"/></label>
+        </p>
+        <p class="pcode">
+            <label>效验码：<input type="text" name="code" id="code" maxlength="5" class="code" value="" />
+             <img src="${prince }/code" alt="" width="100" height="32" class="passcode" style="height:43px;cursor:pointer;" onclick="this.src=this.src+'?'">
+        </p>
+        <tr>
+								<td colspan="2" height="35" class="login-text02">老板登录 
+									<input type="radio" name="role" value="boss" />&emsp;
+									工作人员登录 
+									<input type="radio" name="role" value="admin" />&emsp;
+									客户登录 
+									<input type="radio" name="role" value="user" />&emsp;
+								</td>
+							</tr>
+        <div class="text-center" id="error_message" style="color: red"></div>
+        <p class="tip">&nbsp;</p>
+        <hr />
+		
+        <input type="button" value=" 登 录 " id="btn" onsubmit="return false" class="btn btn-primary btn-large login" />
+        &nbsp;&nbsp;&nbsp;<input type="button" value=" 取 消 " class="btn btn-large" />
+    </div>
+    </form>
+</body>
+</html>

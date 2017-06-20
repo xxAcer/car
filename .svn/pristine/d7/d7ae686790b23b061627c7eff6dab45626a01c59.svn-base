@@ -1,0 +1,152 @@
+package cn.prince.controller;
+
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.gson.Gson;
+
+import cn.prince.pojo.Car;
+import cn.prince.pojo.Customers;
+import cn.prince.pojo.Rent;
+import cn.prince.service.CarService;
+import cn.prince.service.RentService;
+
+@Controller
+public class RentController {
+
+	@Resource
+	RentService rentService;
+	
+	@Resource
+	CarService carService;
+	
+	
+	
+	
+	
+	
+	
+	//还车功能 还车之后 要把车辆信息 以租改成未租
+	@RequestMapping("huanche")
+	public String huanche(HttpServletRequest request) {
+		
+		String tableid = request.getParameter("tableid");
+		System.out.println("出租单-----------------"+tableid);
+		String carnumber = request.getParameter("carnumber");
+		int id = 0;
+		if(tableid != null) {
+			id = Integer.parseInt(tableid);
+		}
+		int i = rentService.update(id);
+		carService.notRent(carnumber);
+		
+		
+		return null;
+		
+	}
+	
+	@RequestMapping("allrent")
+	@ResponseBody
+	public String allrent(HttpServletRequest request) {
+		Map map = new HashMap<>();
+		List<Rent> rent = rentService.allrent();
+		request.getSession().setAttribute("rent", rent);
+		System.out.println("++++++++++++"+rent.size());
+		
+		if(rent.size()>0) {
+			map.put("flg", "ok");
+		}else {
+			map.put("flg", "ng");
+		}
+		
+		Gson gson = new Gson();
+		String str = gson.toJson(map);
+		System.out.println(str);
+		return str;
+	}
+	
+	@RequestMapping("allrentorder")
+	@ResponseBody
+	public String allrentorder(HttpServletRequest request) {
+		Map map = new HashMap<>();
+		List<Rent> rent = rentService.allrentorder();
+		request.getSession().setAttribute("rent", rent);
+		System.out.println("++++++++++++"+rent.size());
+		
+		if(rent.size()>0) {
+			map.put("flg", "ok");
+		}else {
+			map.put("flg", "ng");
+		}
+		
+		Gson gson = new Gson();
+		String str = gson.toJson(map);
+		System.out.println(str);
+		return str;
+	}
+	
+	
+	
+	
+	@RequestMapping("yan")
+	public String yanche (HttpServletRequest request) {
+		
+		String uid = UUID.randomUUID().toString().replace("-", "");
+		request.getSession().setAttribute("tableid", uid);
+		int tableid = Integer.parseInt(request.getParameter("tableid"));
+		Rent rent = rentService.findById(tableid);
+		request.getSession().setAttribute("rent", rent);
+		
+		System.out.println(rent);
+		
+		return "jianche";
+		
+	}
+	
+	@RequestMapping("confirm")
+	public String confirm (HttpServletRequest request) {
+		
+		int tableid = Integer.parseInt(request.getParameter("tableid"));
+		Rent rent = rentService.findByIdOrder(tableid);
+		
+		request.getSession().setAttribute("rent", rent);
+		
+		System.out.println(rent);
+		
+		return "jianche";
+		
+	}
+	
+	
+	
+	@RequestMapping("yinghuan")
+	public String yinghuanche(HttpServletRequest request) {
+	Map map = new HashMap<>();
+	int carflag = 0;
+	List<Rent> c = rentService.yingHun(carflag);
+	request.getSession().setAttribute("yinghuan", c);
+	System.out.println("++++++++++++"+c.size());
+	
+	if(c.size()>0) {
+		map.put("flg", "ok");
+	}else {
+		map.put("flg", "ng");
+	}
+	
+	Gson gson = new Gson();
+	String str = gson.toJson(map);
+	System.out.println(str);
+	return str;
+	}
+
+}

@@ -1,0 +1,128 @@
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<c:set var="prince" value="${pageContext.request.contextPath}"></c:set>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title> 
+    <link rel="stylesheet" type="text/css" href="${prince}/Styles/admin-all.css" />
+    <link rel="stylesheet" type="text/css" href="${prince}/Styles/base.css"/>
+    <script type="text/javascript" src="${prince}/Scripts/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="${prince}/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="${prince}/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
+    <link rel="stylesheet" type="text/css" href="${prince}/Styles/formui.css"/>
+    <script type="text/javascript" src="${prince}/Scripts/tb.js"></script>
+
+    <script  type="text/javascript">
+			$(function() {
+				$.ajax({
+					url : "${prince}/role",
+					dtatType : "json",
+					success : function(data) {
+						var json = JSON.parse(data);
+						console.info(json);
+						for (var i = 0; i < json.length; i++) {
+							var p = json[i];
+							$("#roomId").append(
+									"<option value='"+p.code+"'>" + p.name
+											+ "</option>");
+
+						}
+
+					}
+
+				});
+			});
+			</script>
+			
+			<script type="text/javascript">
+	$(function(){
+		$("#find").click(function(){
+			$.ajax({
+				type:"post",
+				url:"${prince}/updateCar",
+				data:$("#userForm").serialize(),
+				dataType:"json",
+				success:function(data){
+					if(data.flg=="ok"){
+						alert("修改成功")
+						location.href="${prince}/form-guide2";
+					}else{
+						$("#error_message").text("失败!");
+					}				
+				}
+				
+			})
+		})
+	})
+</script>
+			
+			
+			
+</head>
+<body>
+    <div class="alert alert-info">当前位置<b class="tip"></b>修改页面<b class="tip"></b>修改汽车</div>
+    <table class="tbform">
+        <thead>
+            <tr>
+                <td colspan="4" class="auto-style2">&nbsp;请填写修改信息 </td>
+            </tr>
+        </thead>
+        <form action="index.jsp" id="userForm" method="post">
+        <tbody>
+
+            <tr>
+                <td class="tdl">车号</td>
+                <td class="detail">
+                    <input value="${carById.carnumber }" type="text" name="carnumber" readonly="readonly" class="ipt" />
+                </td>
+                
+            </tr>
+            <tr>
+                <td class="tdl">型号</td>
+                <td>
+                         <input type="text" value="${carById.cartype }" name="cartype" class="ipt" />
+                </td>
+            </tr>
+            <tr>
+                <td class="tdl">颜色 </td>
+                <td>
+                         <input type="text" value="${carById.color }" name="color" class="ipt" />
+                </td>
+            </tr>
+            <tr>
+                <td class="tdl">价值</td>
+                <td>
+                    <div class="input-append">
+                       <input type="text" value="${carById.price }"  name="price" class="ipt" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdl">租金 </td>
+                <td>
+                         <input type="text"value="${carById.rentprice }" name="rentprice" class="ipt" />
+                </td>
+            </tr>
+            <tr>
+                <td class="tdl">押金</td>
+                <td class="detail">
+                    <input type="text" value="${carById.deposit }" name="deposit" class="ipt" />
+                </td>
+            </tr>
+             <tr>
+                <td class="tdl">简介</td>
+                <td class="detail">
+                    <input type="text" value="${carById.description }" name="description" class="ipt" />
+                </td>
+                
+            </tr>
+                <td colspan="6" align="left">
+                    <input class="btn" id="find" type="button" value="修改" />
+            </tr>
+        </tbody>
+      </form>
+    </table>
+</body>
+</html>

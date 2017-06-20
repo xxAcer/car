@@ -1,0 +1,13 @@
+package cn.prince.mapper;
+
+import java.util.List;
+
+import cn.prince.pojo.Loginlogs;
+
+public interface LoginlogMapper {
+
+	void loginlogAdd(String username, String ipAddr, String dateNowStr);
+
+	List<Loginlogs> selectLog();
+	
+}

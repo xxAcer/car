@@ -1,0 +1,79 @@
+package cn.prince.controller;
+
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.gson.Gson;
+
+import cn.prince.pojo.Checktable;
+import cn.prince.pojo.Rent;
+import cn.prince.service.CarService;
+import cn.prince.service.CheckService;
+import cn.prince.service.RentService;
+
+@Controller
+public class CheckController {
+	@Resource
+	CheckService checkService;
+	@Resource
+	RentService rentService;
+	@Resource
+	CarService carService;
+	
+	//检查单 插到数据库里面 同时 也代表着还车完成 需要更新出租单里面 汽车的状态
+	@RequestMapping("check")
+	public String check(HttpServletRequest request) {
+		Date checkdate = Date.valueOf(request.getParameter("checkdate"));
+		String problem = request.getParameter("problem");
+		String paying = request.getParameter("paying");
+		String username = request.getParameter("username");
+		int rentid = Integer.parseInt(request.getParameter("rentid"));
+		
+		//根据售货单id 查询 出售单信息
+		Rent rent = rentService.findById(rentid);
+		int carid = rent.getCarid();
+		
+		Checktable checktable = new Checktable(0, checkdate, problem, paying, username, rentid);
+		
+		int i = checkService.add(checktable);
+		
+		if(i>0) {
+			carService.notRent(carid);
+			rentService.updateById(rentid );
+		}
+		
+		return "jianche";
+		
+	}
+	
+	@RequestMapping("checkAll")
+	@ResponseBody
+	public String checkAll(HttpServletRequest request)  {
+		Map map = new HashMap<>();
+		List<Checktable> c = checkService.findAll();
+		request.getSession().setAttribute("check", c);
+		System.out.println("++++++++++++"+c.size());
+		
+		if(c.size()>0) {
+			map.put("flg", "ok");
+		}else {
+			map.put("flg", "ng");
+		}
+		
+		Gson gson = new Gson();
+		String str = gson.toJson(map);
+		System.out.println(str);
+		return str;
+	}
+	
+	
+}

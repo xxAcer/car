@@ -1,0 +1,31 @@
+package cn.prince.service.impl;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import cn.prince.mapper.LoginlogMapper;
+import cn.prince.pojo.Loginlogs;
+import cn.prince.service.LoginlogService;
+
+@Service
+public class LoginlogServiceImpl implements LoginlogService {
+	
+	@Resource
+	LoginlogMapper loginlogMapper;
+	
+	@Override
+	public void loginlogAdd(String username, String ipAddr, String dateNowStr) {
+		// TODO Auto-generated method stub
+		loginlogMapper.loginlogAdd(username,ipAddr,dateNowStr);
+	}
+
+	@Override
+	public List<Loginlogs> selectLog() {
+		// TODO Auto-generated method stub
+		return loginlogMapper.selectLog();
+	}
+	
+}

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.prince.mapper.MenuMapper">
+
+	<select id="findMenuById" resultType="cn.prince.pojo.Menu">
+		select  mname, pmenuid, url from menus m
+		LEFT JOIN roles_menus rs on m.menuid = rs.menuid
+		LEFT JOIN roles r ON r.roleid=rs.roleid
+		LEFT JOIN users u on u.roleid=r.roleid
+		where userid = #{id} ORDER BY m.menuid
+
+	</select>
+	
+	<select id="findMenuById1" resultType="cn.prince.pojo.Menu">
+		select  mname, pmenuid, url from menus m
+		LEFT JOIN roles_menus rs on m.menuid = rs.menuid
+		LEFT JOIN roles r ON r.roleid=rs.roleid
+		LEFT JOIN customers c on c.roleid=r.roleid
+		where c.id = #{id1} ORDER BY m.menuid
+
+	</select>
+	
+
+</mapper>

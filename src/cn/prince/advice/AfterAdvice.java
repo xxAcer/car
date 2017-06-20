@@ -1,0 +1,21 @@
+package cn.prince.advice;
+
+import java.lang.reflect.Method;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.aop.AfterReturningAdvice;
+import org.springframework.stereotype.Controller;
+
+@Aspect
+public class AfterAdvice  {
+	
+	@AfterReturning(value="execution(* cn.prince.service.*.*(..)))",returning = "查询用户")
+	public void afterReturning(Object returnVal)  {
+		System.out.println("后置通知========="+returnVal);
+		
+	}
+	
+}

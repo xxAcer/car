@@ -1,0 +1,11 @@
+package cn.prince.mapper;
+
+import java.util.List;
+
+import cn.prince.pojo.Roles;
+
+public interface RolesMapper {
+
+	List<Roles> find();
+
+}

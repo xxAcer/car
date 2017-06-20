@@ -1,0 +1,90 @@
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!-- 取得到项目的根路径 -->
+<c:set var="prince" value="${pageContext.request.contextPath}"></c:set>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<link rel="stylesheet" type="text/css"
+	href="${prince}/Styles/formui.css" />
+<link rel="stylesheet" type="text/css" href="${prince}/Styles/base.css" />
+<link rel="stylesheet" type="text/css"
+	href="${prince}/Styles/admin-all.css" />
+<script type="text/javascript" src="${prince}/Scripts/jquery-1.7.2.js"></script>
+<script type="text/javascript"
+	src="${prince}/Scripts/jquery-ui-1.8.22.custom.min.js"></script>
+<script type="text/javascript"
+	src="${prince}/My97DatePicker/WdatePicker.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="${prince}/Styles/ui-lightness/jquery-ui-1.8.22.custom.css" />
+<script src="${prince}/js/jquery.js"></script>
+<!-- <script type="text/javascript">
+$(function(){
+	$("#btn").click(function(){
+		$.ajax({
+			type:"post",
+			url:"${prince}/rent",
+			data:$("#userForm").serialize(),
+			dataType:"json",
+			success:function(data){
+				if(data.flg=="ok"){
+					location.href="${prince}/index";
+				}else{
+					$("#error_message").text("失败!");
+				}				
+			}
+			
+		})
+	})
+})
+</script> -->
+<script type="text/JavaScript">
+             function rent(){
+            	 var flag=window.confirm("验收完成");
+            	 
+             }
+		</script>
+</head>
+<body>
+	<div class="alert alert-info">
+		当前位置<b class="tip"></b>检车界面<b class="tip"></b>检车
+	</div>
+
+	<form action="check" id="userForm" method="post">
+		<table class="tbform list">
+			<tbody>
+				<tr>
+					<td class="tdl">检查编号</td>
+					<td><input type="text" readonly="readonly"
+						value="${rents.tableid }" name="checkid"
+						class="ipt" /></td>
+					<td class="tdl">检查时间</td>
+					<td><input type="text" onfocus="WdatePicker();"
+						name="checkdate" class="ipt" /></td>
+				</tr>
+				<tr>
+					<td class="tdl">问题</td>
+					<td><input type="text"  name="problem" class="ipt" /></td>
+					<td class="tdl">赔费</td>
+					<td><input type="text"
+						 name="paying" class="ipt" /></td>
+				</tr>
+				<tr>
+
+					<td class="tdl">检查员</td>
+					<td><input type="text" readonly="readonly" name="username" value="${user.username }" class="ipt" /></td>
+					<td class="tdl">出租单编号</td>
+					<td><input type="text" name="rentid" readonly="readonly" value="${rents.tableid }" class="ipt" /></td>
+					<td class="tdl">&nbsp;操作</td>
+					<td colspan="6"><input class="btn btn-mini btn-primary"
+						id="btn" type="submit" onclick="rent();" value="检车" /></td>
+				</tr>
+			</tbody>
+		</table>
+		</tbody>
+		</table>
+	</form>
+</body>
+</html>

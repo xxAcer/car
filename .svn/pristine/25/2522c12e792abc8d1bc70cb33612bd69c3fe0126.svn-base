@@ -1,0 +1,82 @@
+package cn.prince.service.impl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import cn.prince.mapper.CarMapper;
+import cn.prince.pojo.Car;
+import cn.prince.service.CarService;
+import cn.prince.utils.PageBean;
+@Service
+public class CarServiceImpl implements CarService {
+
+	@Resource
+	CarMapper carMapper;
+	
+	@Override
+	public List<Car> find() {
+		// TODO Auto-generated method stub
+		return carMapper.find();
+	}
+
+	@Override
+	public Car findById(int carnumber) {
+		// TODO Auto-generated method stub
+		return carMapper.findById(carnumber);
+	}
+
+	@Override
+	public int addCar(Car car) {
+		// TODO Auto-generated method stub
+		return carMapper.addCar(car);
+	}
+
+	@Override
+	public void toRent(int carid) {
+		// TODO Auto-generated method stub
+		carMapper.toRent(carid);
+	}
+
+	@Override
+	public void notRent(int carnumber) {
+		// TODO Auto-generated method stub
+		carMapper.notRent(carnumber);
+	}
+
+	@Override
+	public void findAll() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	//分页查询
+	@Override
+	public void findAll(PageBean pageBean) {
+		List<Car> list = new ArrayList<>();
+		list = carMapper.find();
+		int totalCount = carMapper.findCount();
+		pageBean.setTotalCount(totalCount);
+		int start = pageBean.getStartRow();
+		int end = pageBean.getEndRow();
+		Map map = new HashMap();
+		int size = pageBean.getSize();
+		map.put("start", start);
+		map.put("end", size);
+		list = carMapper.findPage(map);
+		pageBean.setList(list);
+		
+	}
+
+	@Override
+	public int removeCars(Integer id) {
+		// TODO Auto-generated method stub
+		return carMapper.removeCar(id);
+	}
+	
+}

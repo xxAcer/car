@@ -1,0 +1,33 @@
+package cn.prince.mapper;
+
+import java.util.List;
+
+import cn.prince.pojo.Rent;
+
+public interface RentMapper {
+
+	int addorder(Rent r);
+
+	int update(int id);
+
+	List<Rent> allrent();
+
+	Rent findById(int tableid);
+
+	void updateById(int id);
+
+	List<Rent> yingHuan(int carflag);
+
+	List<Rent> allrentorder();
+
+	Rent findByIdOrder(int tableid);
+
+	int add(Rent r);
+
+	void updateByIdOrder(int tableid);
+
+	List<Rent> rentByC(String string);
+
+	List<Rent> rentorderByC(String id);
+
+}

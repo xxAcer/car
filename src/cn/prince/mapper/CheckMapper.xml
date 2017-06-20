@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.prince.mapper.CheckMapper">
+
+	<!--添加检查单信息 -->
+	<insert id="add">
+		insert into checktable
+		(checkid,checkdate,problem,paying,username,rentid)
+		values
+		(#{checkid},#{checkdate},#{problem},#{paying},#{username},#{rentid})
+	</insert>
+
+	<!-- 查询全部的检查单 -->
+	<select id="findAll" resultType="cn.prince.pojo.Checktable">
+		select * from checktable
+	</select>
+
+
+</mapper>

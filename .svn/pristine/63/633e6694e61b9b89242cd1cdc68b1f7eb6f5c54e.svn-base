@@ -1,0 +1,212 @@
+package cn.prince.controller;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.gson.Gson;
+
+import cn.prince.pojo.Car;
+import cn.prince.service.CarService;
+import cn.prince.utils.PageBean;
+
+@Controller
+public class CarController {
+
+	@Resource
+	CarService carService;
+
+	// 查询全部的汽车信息 并分页
+	@RequestMapping("car")
+	@ResponseBody
+	public void car(Car car, HttpServletRequest request, HttpServletResponse response) {
+		Map map = new HashMap<>();
+
+		int index = 1;
+		String sindex = request.getParameter("index");// null
+		if (sindex != null && !"".equals(sindex)) {
+			index = Integer.parseInt(sindex);
+		}
+
+		int size = 5;
+		String ssize = request.getParameter("size");// null
+		if (ssize != null && !"".equals(ssize)) {
+			size = Integer.parseInt(ssize);
+		}
+
+		PageBean pageBean = new PageBean<Car>();
+		pageBean.setIndex(index);
+		pageBean.setSize(size);
+
+		carService.findAll(pageBean);
+
+		request.getSession().setAttribute("pageBean", pageBean);
+
+		System.out.println("pagedaxiao++++++++" + pageBean.getSize());
+
+		// List<Car> c = carService.find();
+		// request.getSession().setAttribute("car", c);
+		// System.out.println("++++++++++++"+c.size());
+		//
+		// if(c.size()>0) {
+		map.put("flg", "ok");
+		// }else {
+		// map.put("flg", "ng");
+		// }
+
+		// Gson gson = new Gson();
+		// String str = gson.toJson(map);
+		// System.out.println(str);
+		try {
+			request.getRequestDispatcher("form-guide.html").forward(request, response);
+		} catch (ServletException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// return "form-guide";
+
+	}
+
+	// 查询全部的汽车信息 并分页
+	@RequestMapping("allCar")
+	@ResponseBody
+	public void allcar(Car car, HttpServletRequest request, HttpServletResponse response) {
+		Map map = new HashMap<>();
+
+		int index = 1;
+		String sindex = request.getParameter("index");// null
+		if (sindex != null && !"".equals(sindex)) {
+			index = Integer.parseInt(sindex);
+		}
+
+		int size = 5;
+		String ssize = request.getParameter("size");// null
+		if (ssize != null && !"".equals(ssize)) {
+			size = Integer.parseInt(ssize);
+		}
+
+		PageBean pageBean = new PageBean<Car>();
+		pageBean.setIndex(index);
+		pageBean.setSize(size);
+
+		carService.findAll(pageBean);
+
+		request.getSession().setAttribute("pageBean", pageBean);
+
+		System.out.println("pagedaxiao++++++++" + pageBean.getSize());
+
+		// List<Car> c = carService.find();
+		// request.getSession().setAttribute("car", c);
+		// System.out.println("++++++++++++"+c.size());
+		//
+		// if(c.size()>0) {
+		map.put("flg", "ok");
+		// }else {
+		// map.put("flg", "ng");
+		// }
+
+//		 Gson gson = new Gson();
+//		 String str = gson.toJson(map);
+		// System.out.println(str);
+		try {
+			request.getRequestDispatcher("form-guide2.html").forward(request, response);
+		} catch (ServletException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		 return "str";
+
+	}
+	
+	@RequestMapping("addCars")
+	@ResponseBody
+	public String addCar(HttpServletRequest request) {
+		Map map = new HashMap<>();
+		Integer id = 0;
+
+		String cartype = request.getParameter("cartype");
+		String color = request.getParameter("color");
+		String price = request.getParameter("price");
+		String rentprice = request.getParameter("rentprice");
+		String deposit = request.getParameter("doposit");
+		String description = request.getParameter("description");
+
+		Car car = new Car(0, cartype, color, price, rentprice, deposit, "0", description);
+
+		int i = carService.addCar(car);
+
+		if (i > 0) {
+			map.put("flg", "ok");
+		} else {
+			map.put("flg", "ng");
+		}
+		Gson gson = new Gson();
+		String str = gson.toJson(map);
+		System.out.println(str);
+		return str;
+	}
+	
+	@RequestMapping("removeCar")
+	@ResponseBody
+	public void removeCars(HttpServletRequest request, HttpServletResponse response) {
+		Map map = new HashMap<>();
+		Integer id = 0;
+		String carnumber = request.getParameter("carnumber");
+		if(carnumber != null) {
+			id = Integer.parseInt(carnumber);
+		}
+				
+		int i = carService.removeCars(id);
+
+		if (i > 0) {
+			map.put("flg", "ok");
+		} else {
+			map.put("flg", "ng");
+		}
+		try {
+			request.getRequestDispatcher("form-guide2.html").forward(request, response);
+		} catch (ServletException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("updateCar")
+	@ResponseBody
+	public String updateCars(HttpServletRequest request) {
+		Map map = new HashMap<>();
+		Integer id = 0;
+
+		String cartype = request.getParameter("cartype");
+		String color = request.getParameter("color");
+		String price = request.getParameter("price");
+		String rentprice = request.getParameter("rentprice");
+		String deposit = request.getParameter("doposit");
+		String description = request.getParameter("description");
+
+		Car car = new Car(0, cartype, color, price, rentprice, deposit, "0", description);
+
+		int i = carService.addCar(car);
+
+		if (i > 0) {
+			map.put("flg", "ok");
+		} else {
+			map.put("flg", "ng");
+		}
+		Gson gson = new Gson();
+		String str = gson.toJson(map);
+		System.out.println(str);
+		return str;
+	}
+
+}

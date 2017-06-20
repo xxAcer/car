@@ -1,0 +1,24 @@
+package cn.prince.service.impl;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import cn.prince.mapper.RolesMapper;
+import cn.prince.pojo.Roles;
+
+@Service
+public class RolesServiceImpl implements cn.prince.service.RolesService {
+	
+	@Resource
+	RolesMapper rolesMapper;
+	
+	@Override
+	public List<Roles> find() {
+		// TODO Auto-generated method stub
+		return rolesMapper.find();
+	}
+
+}

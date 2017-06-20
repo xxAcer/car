@@ -1,0 +1,124 @@
+package cn.prince.service.impl;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import cn.prince.mapper.CarMapper;
+import cn.prince.pojo.Car;
+import cn.prince.service.CarService;
+import cn.prince.utils.PageBean;
+import jxl.Sheet;
+import jxl.Workbook;
+@Service
+public class CarServiceImpl implements CarService {
+
+	@Resource
+	CarMapper carMapper;
+	
+	@Override
+	public List<Car> find() {
+		// TODO Auto-generated method stub
+		return carMapper.find();
+	}
+
+	@Override
+	public Car findById(int carnumber) {
+		// TODO Auto-generated method stub
+		return carMapper.findById(carnumber);
+	}
+
+	@Override
+	public int addCar(Car car) {
+		// TODO Auto-generated method stub
+		return carMapper.addCar(car);
+	}
+
+	@Override
+	public void toRent(int carid) {
+		// TODO Auto-generated method stub
+		carMapper.toRent(carid);
+	}
+
+	@Override
+	public void notRent(int carnumber) {
+		// TODO Auto-generated method stub
+		carMapper.notRent(carnumber);
+	}
+
+	@Override
+	public void findAll() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	//分页查询
+	@Override
+	public void findAll(PageBean pageBean) {
+		List<Car> list = new ArrayList<>();
+		list = carMapper.find();
+		int totalCount = carMapper.findCount();
+		pageBean.setTotalCount(totalCount);
+		int start = pageBean.getStartRow();
+		int end = pageBean.getEndRow();
+		Map map = new HashMap();
+		int size = pageBean.getSize();
+		map.put("start", start);
+		map.put("end", size);
+		list = carMapper.findPage(map);
+		pageBean.setList(list);
+		
+	}
+
+	@Override
+	public int removeCars(Integer id) {
+		// TODO Auto-generated method stub
+		return carMapper.removeCar(id);
+	}
+
+	@Override
+	public int updateCar(Car car) {
+		// TODO Auto-generated method stub
+		return carMapper.updateCar(car);
+	}
+
+	@Override
+	public List<Car> getAllByExcel(String file) {
+		List<Car> list=new ArrayList<Car>();
+        try {
+            Workbook rwb=Workbook.getWorkbook(new File(file));
+            Sheet rs=rwb.getSheet("Test Shee 1");//或者rwb.getSheet(0)
+            int clos=rs.getColumns();//得到所有的列
+            int rows=rs.getRows();//得到所有的行
+            
+            System.out.println(clos+" rows:"+rows);
+            for (int i = 1; i < rows; i++) {
+                for (int j = 0; j < clos; j++) {
+                    //第一个是列数，第二个是行数
+                    String carnumber=rs.getCell(j++, i).getContents();//默认最左边编号也算一列 所以这里得j++
+                    String cartype=rs.getCell(j++, i).getContents();
+                    String color=rs.getCell(j++, i).getContents();
+                    String price=rs.getCell(j++, i).getContents();
+                    String rentprice=rs.getCell(j++, i).getContents();
+                    String deposit=rs.getCell(j++, i).getContents();
+                    String isrenting=rs.getCell(j++, i).getContents();
+                    String description=rs.getCell(j++, i).getContents();
+                    
+                    Car car = new Car(Integer.parseInt(carnumber), cartype, color, price, rentprice, deposit, isrenting, description);
+                    list.add(car);
+                }
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } 
+        return list;
+	}
+	
+}

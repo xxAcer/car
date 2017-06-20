@@ -1,0 +1,54 @@
+package cn.prince.controller;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.gson.Gson;
+
+import cn.prince.pojo.Customers;
+import cn.prince.pojo.Loginlogs;
+import cn.prince.pojo.User;
+import cn.prince.service.LoginlogService;
+
+@Controller
+public class LogController {
+	
+	
+	@Resource
+	LoginlogService loginService;
+	
+	@RequestMapping("loginlog")
+	@ResponseBody
+	public String loginlogs(HttpServletRequest request) {
+		Map map = new HashMap<>();
+		List<Loginlogs>  loginlogs = loginService.selectLog();
+		request.getSession().setAttribute("loginlogs", loginlogs);
+		Gson gson = new Gson();
+		String str = gson.toJson(map);
+		System.out.println(str);
+		return str;
+	}
+	
+	@RequestMapping("allLogs")
+	@ResponseBody
+	public String allLogs(HttpServletRequest request) {
+		Map map = new HashMap<>();
+		List<Loginlogs>  allLogs = loginService.allLogs();
+		request.getSession().setAttribute("allLogs", allLogs);
+		Gson gson = new Gson();
+		String str = gson.toJson(map);
+		System.out.println(str);
+		return str;
+	}
+	
+	
+}

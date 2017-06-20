@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.prince.mapper.RentMapper">
+	<!--客户申请租车，会把租车单插入临时的rent 数据库里面 -->
+	<insert id="addorder">
+		insert into renttableorder
+		(tableid,imprest,shouldpayprice,price,begindate,returndate,renflag,carflag,custid,username,carid)
+		values(#{tableid},#{imprest},#{shouldpayprice},#{price},#{begindate},#{returndate},#{renflag},#{carflag},#{custid},#{username},#{carid})
+	</insert>
+
+	<!-- 更新汽车状态 为以申请还 -->
+	<update id="update">
+		update renttable set carflag=1 where tableid = #{0}
+	</update>
+
+	<!--查询全部的出租单信息 -->
+	<select id="allrent" resultType="cn.prince.pojo.Rent">
+		select * from renttable
+	</select>
+
+	<!--查询全部的申请租车单信息 -->
+	<select id="allrentorder" resultType="cn.prince.pojo.Rent">
+		select * from
+		renttableorder
+	</select>
+
+	<!--根据ID查询出租单信息 -->
+	<select id="findById" resultType="cn.prince.pojo.Rent">
+		select * from renttable where
+		tableid=#{0}
+	</select>
+
+	<!--检查之后 更新 出租单检查状态为 以检查 -->
+	<update id="updateById">
+		update renttable set renflag=1 where carid = #{0}
+
+	</update>
+	
+
+	<!--确认还车的时候 更新汽车的状态为 未租  -->
+	<select id="yingHuan" resultType="cn.prince.pojo.Rent">
+		select *
+		from renttable where carflag=#{0}
+	</select>
+
+
+
+</mapper>

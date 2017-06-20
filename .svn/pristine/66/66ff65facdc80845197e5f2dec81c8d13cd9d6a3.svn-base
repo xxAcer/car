@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.prince.mapper.CarMapper">
+	<!-- 查询全部的汽车 -->
+	<select id="find" resultType="cn.prince.pojo.Car">
+		select * from cars
+	</select>
+	
+	<!--根据id查询汽车的信息  -->
+	<select id="findById" resultType="cn.prince.pojo.Car">
+		select * from cars where carnumber=#{0}
+	</select>
+	
+	<!-- 添加车辆信息 默认是未租 -->
+	<insert id="addCar">
+		insert into cars (cartype,color,price,rentprice,deposit,isrenting,description)
+		values (#{cartype},#{color},#{price},#{rentprice},#{deposit},#{isrenting},#{description})
+	</insert>
+	
+	<!--更新车辆状态为以租  -->
+	<update id="toRent">
+		update cars set isrenting=1 where carnumber=#{0}
+	</update>
+	
+	<!--更新车辆状态为未租  -->
+	<update id="notRent">
+		update cars set isrenting=0 where carnumber=#{0}
+	</update>
+	
+	<!-- 查询全部汽车的数目 -->
+	<select id="findCount" resultType="int">
+		select count(*) from cars
+	</select>
+	
+	<!--分页查询  -->
+	<select id="findPage" resultType="cn.prince.pojo.Car">
+		select * from cars limit #{start},#{end}
+	</select>
+	<!-- 删除汽车 -->
+	<delete id="removeCar">
+		delete from cars where carnumber=#{0}
+	</delete>
+	
+	<!-- 更新car -->
+	<update id="updateCar">
+		update cars set cartype=#{cartype},color=#{color},price=#{price},rentprice=#{rentprice}
+		,deposit=#{deposit},description=#{description}
+	</update>
+</mapper>

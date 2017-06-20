@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.prince.mapper.UserMapper">
+	<!--登录 根据 用户名密码查询user表  -->
+	<select id="login" resultType="cn.prince.pojo.User">
+	<!-- select 项目:一定要跟实体类的属性字段一致.-->
+		select userid,username,password from users
+		where username = #{0} and password = #{1}
+	</select>
+	
+	<!--根据条件查询user表  -->
+	<select id="find"  resultType="cn.prince.pojo.User">
+	<!-- select 项目:一定要跟实体类的属性字段一致.-->
+		select userid,username,identity,fullname,sex,address,phone,password,roleid from users
+		where username like concat('%',#{0},'%') or fullname like concat ('%',#{0},'%') 
+  		or identity like concat ('%',#{0},'%')
+	</select>
+	
+	<!--cccccc  -->
+	<insert id="add">
+		insert into users (username,identity,fullname,sex,address,phone,password,roleid,position)
+		values (#{username},#{identity},#{fullname},#{sex},#{address},#{phone},#{password},#{roleid},#{position})
+	</insert>
+	
+	<select id="findAll" resultType="cn.prince.pojo.User">
+		select * from users
+	</select>
+	
+</mapper>

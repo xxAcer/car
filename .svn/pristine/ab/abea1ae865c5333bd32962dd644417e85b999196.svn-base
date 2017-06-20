@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.prince.mapper.CustomersMapper">
+	<!-- 查询客户表 -->
+	<select id="findMenuById" resultType="cn.prince.pojo.Customers">
+		select id,cname,cpwd,custname,sex,address,phone,career,roleid from customers
+		where cname like concat('%',#{string},'%') or custname like concat ('%',#{string},'%')
+
+	</select>
+	
+	<!--登录 根据用户名密码 查询客户表  -->
+	<select id="login" resultType="cn.prince.pojo.Customers">
+	<!-- select 项目:一定要跟实体类的属性字段一致.-->
+		select id,cname,cpwd,custname,sex,address,phone,career,roleid from customers
+		where cname = #{0} and cpwd = #{1}
+	</select>
+	
+	<!-- 添加客户信息 -->
+	<insert id="add">
+		insert into customers (cname,cpwd,custname,sex,address,phone,career,roleid)
+		values (#{cname},#{cpwd},#{custname},#{sex},#{address},#{phone},#{career},#{roleid})
+	</insert>
+	
+	<!-- 查找客户信息，模糊查询 -->
+	<select id="find" resultType="cn.prince.pojo.Customers"> 
+		select id,cname,cpwd,custname,sex,address,phone,career,roleid from customers
+		where cname like concat('%',#{0},'%') or custname like concat ('%',#{0},'%') 
+  		or id like concat ('%',#{0},'%')
+	</select>
+	
+	<!--查询全部客户  -->
+	<select id="findAll" resultType="cn.prince.pojo.Customers">
+		select * from customers
+	</select>
+	
+	
+	
+</mapper>

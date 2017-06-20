@@ -1,0 +1,82 @@
+package cn.prince.controller;
+
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import cn.prince.pojo.Car;
+import cn.prince.pojo.Customers;
+import cn.prince.pojo.Rent;
+import cn.prince.service.CarService;
+import cn.prince.service.CustomersService;
+import cn.prince.service.RentService;
+
+@Controller
+public class CustomersController {
+	
+	@Resource
+	CustomersService ustomersService;
+	@Resource
+	CarService carService;
+	@Resource
+	RentService rentService;
+	
+	//租车的功能 实现跳转的功能
+		@RequestMapping("zhuche")
+		public String zhuche (HttpServletRequest request) {
+			String uid = UUID.randomUUID().toString().replace("-", "");
+			request.getSession().setAttribute("tableid", uid);
+			int carnumber = Integer.parseInt(request.getParameter("carnumber"));
+			Car c = carService.findById(carnumber);
+			request.getSession().setAttribute("carbyid", c);
+			
+			System.out.println(c);
+			
+			return "form-collapse";
+			
+		}
+	
+		//生成租出单，插入到数据库里面 同时把车辆信息 未租改成以租
+		@RequestMapping("rentorder")
+		public String rent(HttpServletRequest request) {
+			
+			Map map = new HashMap<>();
+			Customers customers = (Customers) request.getSession().getAttribute("customers");
+			String username = customers.getCname();
+			System.out.println("客户名----------------"+username);
+			int tableid =Integer.parseInt(request.getParameter("tableid"));
+			String imprest = request.getParameter("imprest");
+			String shouldpayprice = request.getParameter("shouldpayprice");
+			String price = request.getParameter("price");
+			int custid = Integer.parseInt(request.getParameter("custid"));
+			int carid = Integer.parseInt(request.getParameter("carid"));
+			Date begindate = Date.valueOf(request.getParameter("begindate"));
+			Date returndate =Date.valueOf( request.getParameter("returndate"));
+			
+			Rent r = new Rent(tableid, imprest, shouldpayprice, price, begindate, returndate, 0, 0,custid, username, carid);
+			
+			System.out.println("临时出租单"+r);
+			
+			int i = rentService.addorder(r);
+			
+			if(i>0) {
+				System.out.println("车牌号================"+carid);
+				carService.toRent(carid);
+				map.put("flg", "ok");
+			}else {
+				map.put("flg", "ng");
+			}
+			
+			return "index";
+
+		}
+		
+	
+}
